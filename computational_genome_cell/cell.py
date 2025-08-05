@@ -243,6 +243,17 @@ class EvolutionaryCell:
         self.atp += atp_produced
         self.atp = min(self.atp, self.max_atp)
         
+        # Ensure at least one ribosome before protein synthesis
+        if len(self.ribosomes) == 0:
+            ribosome_protein_cost = 20.0
+            if self.components.proteins >= ribosome_protein_cost:
+                self.components.proteins -= ribosome_protein_cost
+            else:
+                # Not enough proteins, forcibly create one (proteins may go negative)
+                self.components.proteins -= ribosome_protein_cost
+            self.ribosomes.append(Ribosome())
+            self.components.ribosomes = len(self.ribosomes)
+
         # 2. Protein Synthesis (Ribosomes)
         proteins_synthesized = 0.0
         if len(self.ribosomes) > 0:
