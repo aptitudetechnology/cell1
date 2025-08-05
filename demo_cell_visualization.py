@@ -27,14 +27,14 @@ def draw_hybrid_cell_diagram():
     # Nucleus - central purple circle
     nucleus = Circle((0.5, 0.5), 0.12, 
                     facecolor='purple', 
-                    edgecolor='darkpurple', 
+                    edgecolor='indigo', 
                     linewidth=2,
                     alpha=0.6)
     ax.add_patch(nucleus)
     
     # Nucleolus
     nucleolus = Circle((0.5, 0.5), 0.04, 
-                      facecolor='darkpurple',
+                      facecolor='#4B0082',
                       alpha=0.8)
     ax.add_patch(nucleolus)
     
