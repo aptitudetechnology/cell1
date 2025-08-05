@@ -13,7 +13,7 @@ from genome import ComputationalGenome
 class CellularComponents:
     """Data class to track cellular component quantities."""
     mitochondria: int = 10
-    ribosomes: int = 15
+    ribosomes: int = 30
     proteins: float = 100.0
     lipids: float = 50.0
     nucleotides: float = 30.0
@@ -332,15 +332,29 @@ class EvolutionaryCell:
         self.atp *= 0.5
         daughter.atp = self.atp
         
-        # Divide organelles
-        half_mito = len(self.mitochondria) // 2
+        # Divide organelles, ensure at least 1 of each in both cells
+        total_mito = len(self.mitochondria)
+        half_mito = max(1, total_mito // 2)
+        if total_mito - half_mito == 0:
+            half_mito = total_mito - 1  # Ensure at least 1 in daughter
         daughter.mitochondria = self.mitochondria[half_mito:]
         self.mitochondria = self.mitochondria[:half_mito]
-        
-        half_ribo = len(self.ribosomes) // 2
+        if len(self.mitochondria) == 0:
+            self.mitochondria = [Mitochondrion()]
+        if len(daughter.mitochondria) == 0:
+            daughter.mitochondria = [Mitochondrion()]
+
+        total_ribo = len(self.ribosomes)
+        half_ribo = max(1, total_ribo // 2)
+        if total_ribo - half_ribo == 0:
+            half_ribo = total_ribo - 1  # Ensure at least 1 in daughter
         daughter.ribosomes = self.ribosomes[half_ribo:]
         self.ribosomes = self.ribosomes[:half_ribo]
-        
+        if len(self.ribosomes) == 0:
+            self.ribosomes = [Ribosome()]
+        if len(daughter.ribosomes) == 0:
+            daughter.ribosomes = [Ribosome()]
+
         # Update components counts
         self.components.mitochondria = len(self.mitochondria)
         self.components.ribosomes = len(self.ribosomes)
