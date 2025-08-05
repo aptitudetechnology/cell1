@@ -223,9 +223,9 @@ def draw_cell_population_grid():
         ax.add_patch(nucleus)
         
         # Mitochondria (number based on cell)
-        n_mito = min(cell.mitochondria_count, 6)
+        n_mito = min(getattr(cell.components, 'mitochondria', 6), 6)
         for i in range(n_mito):
-            angle = i * 2 * np.pi / n_mito
+            angle = i * 2 * np.pi / n_mito if n_mito > 0 else 0
             x = 0.5 + 0.2 * np.cos(angle)
             y = 0.5 + 0.2 * np.sin(angle)
             mito = Ellipse((x, y), 0.08, 0.04, 
@@ -235,9 +235,9 @@ def draw_cell_population_grid():
             ax.add_patch(mito)
         
         # Ribosomes (number based on cell)
-        n_ribo = min(cell.ribosome_count, 8)
+        n_ribo = min(getattr(cell.components, 'ribosomes', 8), 8)
         for i in range(n_ribo):
-            angle = i * 2 * np.pi / n_ribo + np.pi / n_ribo
+            angle = i * 2 * np.pi / n_ribo + np.pi / n_ribo if n_ribo > 0 else 0
             x = 0.5 + 0.15 * np.cos(angle)
             y = 0.5 + 0.15 * np.sin(angle)
             ribo = Circle((x, y), 0.02, 
