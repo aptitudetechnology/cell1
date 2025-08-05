@@ -212,6 +212,8 @@ class EvolutionaryCell:
         self.can_divide = False
         self.energy_debt = 0.0
     
+    MIN_RIBOSOMES_FOR_DIVISION = 10
+
     def update(self, time_step: float, nutrients_available: float = 1.0) -> Dict:
         """
         Update cell state for one time step.
@@ -263,17 +265,30 @@ class EvolutionaryCell:
         growth_efficiency = 0.8  # 80% of proteins convert to mass
         mass_gained = proteins_synthesized * growth_efficiency
         self.mass += mass_gained
-        
-        # 4. Maintenance Costs
+
+        # 4. Ribosome Synthesis (convert proteins to ribosomes)
+        ribosome_protein_cost = 20.0  # Number of proteins needed for 1 ribosome
+        new_ribosomes = 0
+        while self.components.proteins >= ribosome_protein_cost:
+            self.components.proteins -= ribosome_protein_cost
+            self.ribosomes.append(Ribosome())
+            new_ribosomes += 1
+        self.components.ribosomes = len(self.ribosomes)
+
+        # 5. Maintenance Costs
         maintenance_cost = self.mass * 0.01 * time_step  # 1% per time unit
         self.atp -= maintenance_cost
-        
-        # 5. Check for Division Readiness
-        if self.mass >= self.parameters['division_threshold'] and not self.nucleus.is_replicating:
-            if not self.nucleus.is_replicating:
-                self.nucleus.start_dna_replication()
-        
-        # 6. DNA Replication
+
+        # 6. Check for Division Readiness (require enough ribosomes)
+        can_attempt_division = (
+            self.mass >= self.parameters['division_threshold']
+            and len(self.ribosomes) >= self.MIN_RIBOSOMES_FOR_DIVISION
+            and not self.nucleus.is_replicating
+        )
+        if can_attempt_division:
+            self.nucleus.start_dna_replication()
+
+        # 7. DNA Replication
         replication_complete = False
         if self.nucleus.is_replicating:
             atp_for_replication = min(self.atp * 0.3, self.atp)  # Use up to 30% of ATP
@@ -282,7 +297,7 @@ class EvolutionaryCell:
             )
             if atp_for_replication > 0:
                 self.atp -= min(atp_for_replication, 10.0 * time_step)
-        
+
         if replication_complete:
             self.can_divide = True
         
@@ -306,7 +321,9 @@ class EvolutionaryCell:
             'current_mass': self.mass,
             'current_atp': self.atp,
             'can_divide': self.can_divide,
-            'replication_progress': self.nucleus.dna_replication_progress
+            'replication_progress': self.nucleus.dna_replication_progress,
+            'new_ribosomes': new_ribosomes,
+            'ribosome_count': len(self.ribosomes)
         }
     
     def divide(self) -> Optional['EvolutionaryCell']:
@@ -345,15 +362,18 @@ class EvolutionaryCell:
             daughter.mitochondria = [Mitochondrion()]
 
         total_ribo = len(self.ribosomes)
-        half_ribo = max(1, total_ribo // 2)
-        if total_ribo - half_ribo == 0:
-            half_ribo = total_ribo - 1  # Ensure at least 1 in daughter
-        daughter.ribosomes = self.ribosomes[half_ribo:]
-        self.ribosomes = self.ribosomes[:half_ribo]
-        if len(self.ribosomes) == 0:
+        if total_ribo <= 1:
+            # Only one ribosome, give one to each
             self.ribosomes = [Ribosome()]
-        if len(daughter.ribosomes) == 0:
             daughter.ribosomes = [Ribosome()]
+        else:
+            half_ribo = total_ribo // 2
+            daughter.ribosomes = self.ribosomes[half_ribo:]
+            self.ribosomes = self.ribosomes[:half_ribo]
+            if len(self.ribosomes) == 0:
+                self.ribosomes = [Ribosome()]
+            if len(daughter.ribosomes) == 0:
+                daughter.ribosomes = [Ribosome()]
 
         # Update components counts
         self.components.mitochondria = len(self.mitochondria)
