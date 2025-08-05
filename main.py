@@ -252,7 +252,14 @@ def run_example_scenarios(args):
     if args.scenario in scenario_functions:
         print(f"Running {args.scenario} scenario...")
         result = scenario_functions[args.scenario]()
-        
+        # If the result is a Population, show Rich table
+        from population import Population
+        if isinstance(result, Population):
+            display_population_table(result.cells)
+        # If the result is a list of Populations (e.g. 'all' scenario), show for each
+        elif isinstance(result, list) and all(isinstance(r, Population) for r in result):
+            for pop in result:
+                display_population_table(pop.cells)
         if args.output_file and hasattr(result, 'save_snapshot'):
             result.save_snapshot(args.output_file)
             print(f"Results saved to {args.output_file}")
