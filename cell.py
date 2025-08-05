@@ -45,7 +45,7 @@ class Mitochondrion(Organelle):
     
     def __init__(self, efficiency: float = 1.0):
         super().__init__(efficiency)
-        self.atp_production_rate = 2.0  # Base ATP per time unit
+        self.atp_production_rate = 5.0  # Base ATP per time unit (increased for more ATP)
     
     def produce_atp(self, energy_efficiency_gene: float, time_step: float) -> float:
         """
