@@ -123,7 +123,16 @@ class HybridPopulation:
                     # Update lineage
                     parent_node = self.lineage_tree.get(cell.cell_id)
                     if parent_node:
-                        daughter_node = LineageNode(daughter.cell_id, cell.cell_id)
+                        daughter_node = LineageNode(
+                            cell_id=daughter.cell_id,
+                            genome_value=daughter.genome.genome,
+                            parent_id=cell.cell_id,
+                            birth_time=self.time,
+                            death_time=None,
+                            generation=daughter.generation,
+                            fitness=0.0,
+                            children=[]
+                        )
                         parent_node.add_child(daughter_node)
                         self.lineage_tree[daughter.cell_id] = daughter_node
             
