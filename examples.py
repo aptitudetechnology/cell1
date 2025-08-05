@@ -376,8 +376,8 @@ def interactive_experiment():
         else:
             env = create_competitive_environment()
 
-        # Add a cyclic food drop: every 30 time units, nutrient_density increases by 0.8 (pulse)
-        env.add_cyclic_change('nutrient_density', amplitude=0.8, period=30.0, phase=0.0)
+        # Add a larger cyclic food drop: every 30 time units, nutrient_density increases by 1.5 (bigger pulse)
+        env.add_cyclic_change('nutrient_density', amplitude=1.5, period=30.0, phase=0.0)
 
         print(f"\nRunning experiment with {env.name}...")
 
