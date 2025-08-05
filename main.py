@@ -80,8 +80,8 @@ def create_custom_environment(config: dict) -> Environment:
 
 
 def run_simulation(args):
-    # Example: Show population table after simulation
-    # display_population_table(population.cells)
+    # Show population table after simulation
+    display_population_table(population.cells)
 
     # Example: Live dashboard during simulation (requires generator)
     # def sim_gen():
