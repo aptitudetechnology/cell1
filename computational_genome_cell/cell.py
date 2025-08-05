@@ -256,6 +256,13 @@ class EvolutionaryCell:
 
         # 2. Protein Synthesis (Ribosomes)
         proteins_synthesized = 0.0
+        # Final guard: forcibly create a ribosome if none exist before ATP division
+        if len(self.ribosomes) == 0:
+            ribosome_protein_cost = 20.0
+            self.components.proteins -= ribosome_protein_cost
+            self.ribosomes.append(Ribosome())
+            self.components.ribosomes = len(self.ribosomes)
+
         if len(self.ribosomes) > 0:
             atp_for_proteins = min(self.atp * 0.6, self.atp)  # Use up to 60% of ATP
             atp_per_ribosome = atp_for_proteins / len(self.ribosomes)
