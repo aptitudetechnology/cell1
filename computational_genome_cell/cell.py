@@ -258,20 +258,16 @@ class EvolutionaryCell:
         proteins_synthesized = 0.0
         if len(self.ribosomes) > 0:
             atp_for_proteins = min(self.atp * 0.6, self.atp)  # Use up to 60% of ATP
-            if len(self.ribosomes) > 0:
-                atp_per_ribosome = atp_for_proteins / len(self.ribosomes)
-                for ribosome in self.ribosomes:
-                    proteins_made = ribosome.synthesize_proteins(
-                        self.parameters['growth_rate'],
-                        atp_per_ribosome,
-                        time_step
-                    )
-                    proteins_synthesized += proteins_made
-                    self.atp -= proteins_made * 0.5  # ATP cost
-                self.components.proteins += proteins_synthesized
-            else:
-                # No ribosomes, no protein synthesis
-                proteins_synthesized = 0.0
+            atp_per_ribosome = atp_for_proteins / len(self.ribosomes)
+            for ribosome in self.ribosomes:
+                proteins_made = ribosome.synthesize_proteins(
+                    self.parameters['growth_rate'],
+                    atp_per_ribosome,
+                    time_step
+                )
+                proteins_synthesized += proteins_made
+                self.atp -= proteins_made * 0.5  # ATP cost
+            self.components.proteins += proteins_synthesized
         else:
             # No ribosomes, no protein synthesis
             proteins_synthesized = 0.0
