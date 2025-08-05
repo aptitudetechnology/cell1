@@ -53,7 +53,18 @@ class HybridPopulation:
         self.best_solver_history = []
         
         # Lineage tracking
-        self.lineage_tree = {founder.cell_id: LineageNode(founder.cell_id)}
+        self.lineage_tree = {
+            founder.cell_id: LineageNode(
+                cell_id=founder.cell_id,
+                genome_value=founder.genome.genome,
+                parent_id=founder.parent_id,
+                birth_time=0.0,
+                death_time=None,
+                generation=founder.generation,
+                fitness=0.0,
+                children=[]
+            )
+        }
         
         # Statistics history
         self.statistics_history = []
