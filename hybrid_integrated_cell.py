@@ -114,7 +114,7 @@ class HybridEvolutionaryCell:
         
         self.mitochondria = [Mitochondrion() for _ in range(self.components.mitochondria)]
         self.ribosomes = [Ribosome() for _ in range(self.components.ribosomes)]
-        self.nucleus = Nucleus(self.genome, mutation_rate=self.parameters['mutation_rate'])
+        self.nucleus = Nucleus(self.genome)
     
     def solve_math_problem(self, a: float, b: float) -> Tuple[float, float]:
         """
