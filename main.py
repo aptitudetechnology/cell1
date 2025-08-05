@@ -80,7 +80,57 @@ def create_custom_environment(config: dict) -> Environment:
 
 
 def run_simulation(args):
-    # Live Rich dashboard during simulation
+    """
+    Run main simulation based on command line arguments.
+    
+    Args:
+        args: Parsed command line arguments
+    """
+    print("Computational Genome Cell Evolution System")
+    print("=" * 50)
+    
+    # Create or load initial genome
+    if args.genome_file:
+        with open(args.genome_file, 'r') as f:
+            genome_data = json.load(f)
+        initial_genome = ComputationalGenome.from_dict(genome_data)
+        print(f"Loaded initial genome from {args.genome_file}")
+    elif args.genome_value:
+        initial_genome = ComputationalGenome(args.genome_value)
+        print(f"Using specified genome value: 0x{args.genome_value:08X}")
+    else:
+        initial_genome = ComputationalGenome()
+        print(f"Generated random initial genome: {initial_genome}")
+    
+    # Create environment
+    if args.environment_file:
+        with open(args.environment_file, 'r') as f:
+            env_config = json.load(f)
+        environment = create_custom_environment(env_config)
+        print(f"Loaded environment from {args.environment_file}")
+    elif args.environment == 'benign':
+        environment = create_benign_environment()
+    elif args.environment == 'competitive':
+        environment = create_competitive_environment()
+    elif args.environment == 'harsh':
+        environment = create_harsh_environment()
+    else:
+        environment = create_benign_environment()
+    
+    print(f"Environment: {environment.name}")
+    
+    # Run evolution experiment
+    start_time = time.time()
+    
+    population = run_evolution_experiment(
+        initial_genome=initial_genome,
+        environment=environment,
+        max_time=args.max_time,
+        max_generations=args.max_generations,
+        snapshot_interval=args.snapshot_interval
+    )
+    
+    # Live Rich dashboard after simulation run
     def sim_gen():
         for step in range(int(args.max_time)):
             population.update(1.0)
