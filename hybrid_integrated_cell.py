@@ -99,9 +99,9 @@ class HybridEvolutionaryCell:
         self.components = CellularComponents(
             mitochondria=10,
             ribosomes=15,
-            nucleus=1,
-            dna=len(bin(genome.genome)) - 2,
-            proteins=100
+            proteins=100.0,
+            lipids=50.0,
+            nucleotides=30.0
         )
         
         # Initialize organelles based on components
