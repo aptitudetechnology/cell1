@@ -1,0 +1,38 @@
+{
+  "name": "Nutrient Stress Environment",
+  "conditions": {
+    "temperature": 42.0,
+    "ph": 6.5,
+    "oxygen_level": 0.8,
+    "nutrient_density": 0.3,
+    "toxin_level": 0.2,
+    "carrying_capacity": 300
+  },
+  "selection_pressures": [
+    {
+      "name": "energy_conservation",
+      "target_parameter": "energy_efficiency",
+      "selection_type": "directional",
+      "strength": 0.9
+    },
+    {
+      "name": "optimal_growth",
+      "target_parameter": "growth_rate",
+      "selection_type": "stabilizing",
+      "strength": 0.6,
+      "optimal_value": 1.5
+    }
+  ],
+  "dynamics": {
+    "change_frequency": 0.01,
+    "change_magnitude": 0.15,
+    "cyclic_changes": [
+      {
+        "parameter": "nutrient_density",
+        "amplitude": 0.2,
+        "period": 100.0,
+        "phase": 0.0
+      }
+    ]
+  }
+}
