@@ -1,3 +1,4 @@
+from rich_viz import display_cell_table, display_population_table, live_population_dashboard  # Rich terminal visualization
 """
 Main Simulation Runner
 Entry point for the Computational Genome Cell Evolution System.
@@ -79,6 +80,15 @@ def create_custom_environment(config: dict) -> Environment:
 
 
 def run_simulation(args):
+    # Example: Show population table after simulation
+    # display_population_table(population.cells)
+
+    # Example: Live dashboard during simulation (requires generator)
+    # def sim_gen():
+    #     for step in range(int(args.max_time)):
+    #         population.update(1.0)
+    #         yield step, population.cells
+    # live_population_dashboard(sim_gen(), refresh_rate=1.0)
     """
     Run main simulation based on command line arguments.
     
