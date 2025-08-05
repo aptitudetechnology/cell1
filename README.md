@@ -1,10 +1,17 @@
 # Computational Genome Cell Evolution System
 
-A Python implementation of cellular evolution with computational genomes, demonstrating evolutionary principles through simulation of cells that reproduce via binary fission.
+A Python implementation of cellular evolution with computational genomes, demonstrating evolutionary principles through simulation of cells that reproduce via binary fission. Now includes hybrid bio-AI cells that can evolve problem-solving abilities!
 
 ## Overview
 
 This system implements cells with 32-bit computational genomes that control cellular parameters through gene expression. Cells evolve under selection pressure, showing natural selection, genetic drift, mutation, and adaptation in action.
+
+### New: Hybrid Bio-AI Cells
+The system now includes hybrid cells that combine biological evolution with AI capabilities:
+- Cells have both biological genomes and neural network weights
+- They solve math problems to gain extra energy
+- Natural selection favors better problem-solvers
+- Watch intelligence evolve over generations!
 
 ## Features
 
@@ -14,6 +21,7 @@ This system implements cells with 32-bit computational genomes that control cell
 - **Population Management**: Tracks evolution, lineages, and population genetics
 - **Environmental Pressures**: Configurable selection pressures and conditions
 - **Visualization Tools**: Real-time plotting of evolution dynamics
+- **AI Problem Solving** (NEW): Cells with neural networks that evolve to solve problems
 
 ### Genes and Functions
 1. **Energy Efficiency** (0-255): Controls mitochondrial ATP production rate
@@ -21,12 +29,19 @@ This system implements cells with 32-bit computational genomes that control cell
 3. **Division Threshold** (0-255): Mass required before cell division
 4. **Mutation Rate** (0-255): Probability of mutations during DNA replication
 
+### Hybrid Cell AI Features (NEW)
+- **Neural Network**: Simple 4-weight network for problem solving
+- **Energy Rewards**: Correct answers provide ATP boost
+- **Co-evolution**: Both biological and AI traits evolve together
+- **Selection Pressure**: Intelligence becomes a survival advantage
+
 ### Educational Scenarios
 - **Founder Effect**: Evolution from single ancestor cell
 - **Selection Pressure**: Adaptation under resource limitation
 - **Mutation Rate Evolution**: Optimal mutation rate evolution
 - **Genetic Drift**: Small vs large population dynamics
 - **Adaptive Radiation**: Evolution in different environmental niches
+- **AI Evolution** (NEW): Watch cells evolve problem-solving intelligence
 
 ## Installation
 
@@ -58,6 +73,15 @@ python main.py simulate --environment competitive --visualize --output-dir ./res
 python main.py examples --scenario interactive
 ```
 
+### Run Hybrid Bio-AI Evolution (NEW)
+```bash
+# Run the hybrid cell simulation with problem-solving
+python run_hybrid_simulation.py
+
+# Or run the standalone MVP version
+python hybridcell.py
+```
+
 ## Usage Examples
 
 ### Command Line Interface
@@ -74,6 +98,9 @@ python main.py simulate --environment harsh --output results.json
 
 # Custom genome simulation
 python main.py simulate --genome-value 0x12345678 --max-generations 100
+
+# Run hybrid evolution experiment (NEW)
+python hybrid_population.py
 ```
 
 ### Python API
@@ -98,18 +125,43 @@ population = run_evolution_experiment(
 print(f"Final population: {population.get_population_summary()}")
 ```
 
+### Hybrid Bio-AI API (NEW)
+
+```python
+from hybrid_integrated_cell import HybridEvolutionaryCell, AIGenome
+from hybrid_population import run_hybrid_evolution_experiment
+from environment import create_competitive_environment
+
+# Run hybrid evolution with problem-solving cells
+population = run_hybrid_evolution_experiment(
+    environment=create_competitive_environment(),
+    max_time=1000.0,
+    problem_frequency=10  # Solve problems every 10 ticks
+)
+
+# Get the smartest cell
+best_solver = population.get_best_problem_solver()
+print(f"Best solver accuracy: {best_solver.problem_accuracy:.1f}%")
+```
+
 ## System Architecture
 
 ```
 computational_genome_cell/
-├── genome.py           # 32-bit genome with gene expression
-├── cell.py            # Evolutionary cell with organelles
-├── environment.py     # Environmental conditions and selection
-├── population.py      # Population management and evolution tracking
-├── visualization.py   # Evolution plotting and analysis
-├── examples.py        # Demonstration scenarios
-├── main.py           # Command-line interface
-└── requirements.txt  # Python dependencies
+├── genome.py                    # 32-bit genome with gene expression
+├── cell.py                     # Evolutionary cell with organelles
+├── environment.py              # Environmental conditions and selection
+├── population.py               # Population management and evolution tracking
+├── visualization.py            # Evolution plotting and analysis
+├── examples.py                 # Demonstration scenarios
+├── main.py                     # Command-line interface
+├── requirements.txt            # Python dependencies
+│
+├── hybridcell.py              # Standalone MVP hybrid cell implementation (NEW)
+├── hybrid_integrated_cell.py   # Integrated hybrid cell with AI (NEW)
+├── hybrid_population.py        # Population manager for hybrid cells (NEW)
+├── run_hybrid_simulation.py    # Script to run hybrid evolution (NEW)
+└── new-prompt.md              # Design doc for hybrid cells (NEW)
 ```
 
 ## Scientific Accuracy
@@ -188,6 +240,8 @@ This system serves as both a research tool and educational platform:
 - Explore mutation-selection balance
 - Study population genetics principles
 - Investigate evolutionary trade-offs
+- **NEW**: Watch intelligence evolve through natural selection
+- **NEW**: See how problem-solving ability becomes a survival trait
 
 ### Classroom Activities
 1. Compare evolution under different selection pressures
@@ -195,6 +249,8 @@ This system serves as both a research tool and educational platform:
 3. Study founder effects and genetic bottlenecks
 4. Explore adaptive radiation scenarios
 5. Analyze lineage trees and phylogenetic relationships
+6. **NEW**: Observe AI evolution - cells learning to solve problems
+7. **NEW**: Compare biological vs computational trait evolution
 
 ## Advanced Features
 
@@ -231,6 +287,29 @@ This system serves as both a research tool and educational platform:
 - ~100MB RAM for typical simulations
 - Optional: GPU acceleration for large populations (future enhancement)
 
+## What's New: Hybrid Bio-AI Evolution
+
+The latest addition introduces cells that evolve both biological traits and problem-solving intelligence:
+
+- **Dual Evolution**: Cells have both biological genomes and neural network weights
+- **Problem Solving**: Cells solve math problems to earn extra energy (ATP)
+- **Natural Selection for Intelligence**: Smarter cells survive and reproduce more
+- **Co-evolution**: Watch how biological and computational traits evolve together
+- **Research Applications**: Study emergence of intelligence through evolution
+
+### Running Hybrid Simulations
+
+```bash
+# Full integrated hybrid simulation
+python run_hybrid_simulation.py
+
+# Standalone MVP version (< 200 lines)
+python hybridcell.py
+
+# Direct API usage
+python hybrid_population.py
+```
+
 ## Contributing
 
 This is an educational and research tool. Contributions welcome for:
@@ -239,6 +318,8 @@ This is an educational and research tool. Contributions welcome for:
 - Performance optimizations
 - Educational scenarios
 - Documentation improvements
+- Enhanced AI capabilities for cells
+- More complex problem types for cells to solve
 
 ## License
 
