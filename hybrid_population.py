@@ -133,7 +133,7 @@ class HybridPopulation:
                             fitness=0.0,
                             children=[]
                         )
-                        parent_node.add_child(daughter_node)
+                        parent_node.children.append(daughter_node.cell_id)
                         self.lineage_tree[daughter.cell_id] = daughter_node
             
             # Check for death
