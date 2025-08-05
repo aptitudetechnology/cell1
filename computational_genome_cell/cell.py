@@ -256,25 +256,22 @@ class EvolutionaryCell:
 
         # 2. Protein Synthesis (Ribosomes)
         proteins_synthesized = 0.0
-        # Final guard: if there are no ribosomes, skip protein synthesis for this update
-        if len(self.ribosomes) == 0:
+        # Final guard: atomically check ribosome count and use it for division
+        ribosome_count = len(self.ribosomes)
+        if ribosome_count == 0:
             proteins_synthesized = 0.0
         else:
             atp_for_proteins = min(self.atp * 0.6, self.atp)  # Use up to 60% of ATP
-            ribosome_count = len(self.ribosomes)
-            if ribosome_count == 0:
-                proteins_synthesized = 0.0
-            else:
-                atp_per_ribosome = atp_for_proteins / ribosome_count
-                for ribosome in self.ribosomes:
-                    proteins_made = ribosome.synthesize_proteins(
-                        self.parameters['growth_rate'],
-                        atp_per_ribosome,
-                        time_step
-                    )
-                    proteins_synthesized += proteins_made
-                    self.atp -= proteins_made * 0.5  # ATP cost
-                self.components.proteins += proteins_synthesized
+            atp_per_ribosome = atp_for_proteins / ribosome_count
+            for ribosome in self.ribosomes:
+                proteins_made = ribosome.synthesize_proteins(
+                    self.parameters['growth_rate'],
+                    atp_per_ribosome,
+                    time_step
+                )
+                proteins_synthesized += proteins_made
+                self.atp -= proteins_made * 0.5  # ATP cost
+            self.components.proteins += proteins_synthesized
         
         # 3. Growth and Mass Increase
         growth_efficiency = 0.8  # 80% of proteins convert to mass
@@ -348,7 +345,7 @@ class EvolutionaryCell:
         Returns:
             Daughter EvolutionaryCell or None if division not possible
         """
-        if not self.can_divide or not self.is_alive:
+        if not self.can_divide or not self.is_alive or len(self.ribosomes) < self.MIN_RIBOSOMES_FOR_DIVISION:
             return None
         
         # Get mutated genome for daughter
