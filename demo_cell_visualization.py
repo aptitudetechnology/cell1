@@ -94,73 +94,77 @@ def draw_hybrid_cell_diagram():
                bbox=dict(boxstyle="round,pad=0.3", facecolor='lightblue', alpha=0.8))
     
     # --- AI Brain: Main Cell Diagram ---
-    # Place the AI brain inside the cell membrane
-    nn_center_x = 0.65
-    nn_center_y = 0.35
-    nn_radius = 0.09
-    # Draw selection circle around the AI brain
-    selection_circle = Circle((nn_center_x, nn_center_y), nn_radius, facecolor='none', edgecolor='orange', linewidth=2, linestyle='dashed', alpha=0.9)
-    ax.add_patch(selection_circle)
-    # Draw neural network inside selection circle
+    # Place the AI brain fully inside the cell membrane, in a clear cytoplasmic area
+    nn_center_x = 0.68
+    nn_center_y = 0.32
+    nn_radius = 0.08
+    # Draw magnification circle (subtle border)
+    magnify_circle = Circle((nn_center_x, nn_center_y), nn_radius, facecolor='none', edgecolor='gray', linewidth=2, linestyle='dashed', alpha=0.8)
+    ax.add_patch(magnify_circle)
+    # Draw neural network inside magnification circle
     input_nodes = [(nn_center_x - 0.03, nn_center_y + 0.03), (nn_center_x - 0.03, nn_center_y - 0.03)]
     hidden_nodes = [(nn_center_x + 0.03, nn_center_y + 0.03), (nn_center_x + 0.03, nn_center_y - 0.03)]
     output_node = (nn_center_x + 0.06, nn_center_y)
     for inp in input_nodes:
         for hid in hidden_nodes:
-            ax.plot([inp[0], hid[0]], [inp[1], hid[1]], 'g-', linewidth=2, alpha=0.6)
+            ax.plot([inp[0], hid[0]], [inp[1], hid[1]], 'g-', linewidth=2, alpha=0.7)
     for hid in hidden_nodes:
-        ax.plot([hid[0], output_node[0]], [hid[1], output_node[1]], 'r-', linewidth=2, alpha=0.6)
+        ax.plot([hid[0], output_node[0]], [hid[1], output_node[1]], 'r-', linewidth=2, alpha=0.7)
     for node in input_nodes:
-        circle = Circle(node, 0.015, facecolor='lightgreen', edgecolor='darkgreen', linewidth=2)
+        circle = Circle(node, 0.013, facecolor='lightgreen', edgecolor='darkgreen', linewidth=2)
         ax.add_patch(circle)
     for node in hidden_nodes:
-        circle = Circle(node, 0.015, facecolor='yellow', edgecolor='orange', linewidth=2)
+        circle = Circle(node, 0.013, facecolor='yellow', edgecolor='orange', linewidth=2)
         ax.add_patch(circle)
-    output_circle = Circle(output_node, 0.015, facecolor='lightcoral', edgecolor='darkred', linewidth=2)
+    output_circle = Circle(output_node, 0.013, facecolor='lightcoral', edgecolor='darkred', linewidth=2)
     ax.add_patch(output_circle)
     # Label inside cell
-    ax.text(nn_center_x, nn_center_y + nn_radius + 0.02, 'AI Brain (Neural Network)', fontsize=10, ha='center', fontweight='bold', color='orange')
-    # --- Magnified Inset Diagram ---
-    # Place inset to the right of the main cell
-    inset_ax = fig.add_axes([0.72, 0.12, 0.22, 0.22])
-    inset_ax.set_xlim(-0.1, 0.1)
-    inset_ax.set_ylim(-0.1, 0.1)
+    ax.text(nn_center_x, nn_center_y + nn_radius + 0.02, 'AI Brain (Neural Network)', fontsize=10, ha='center', fontweight='bold', color='gray')
+
+    # --- Connection Line to Magnified View ---
+    # Draw a curved line from the magnification circle to the magnified frame
+    # Start from the top-right of the magnification circle
+    arrow_start = (nn_center_x + nn_radius * 0.7, nn_center_y + nn_radius * 0.7)
+    # End at the left edge of the magnified frame
+    arrow_end = (0.78, 0.38)
+    ax.annotate('', xy=arrow_end, xytext=arrow_start,
+               arrowprops=dict(arrowstyle='->', lw=2, color='gray', connectionstyle="arc3,rad=0.3"))
+
+    # --- Magnified Frame ---
+    # Large circular frame outside the cell (right side)
+    inset_ax = fig.add_axes([0.72, 0.32, 0.22, 0.32])
+    inset_ax.set_xlim(-0.12, 0.12)
+    inset_ax.set_ylim(-0.12, 0.12)
     inset_ax.set_aspect('equal')
     inset_ax.axis('off')
-    # Draw box background
-    inset_box = FancyBboxPatch((-0.09, -0.09), 0.18, 0.18, boxstyle="round,pad=0.02", facecolor='lightyellow', edgecolor='orange', linewidth=2, alpha=0.7)
-    inset_ax.add_patch(inset_box)
-    # Draw magnified neural network
-    input_nodes_inset = [(-0.05, 0.05), (-0.05, -0.05)]
-    hidden_nodes_inset = [(0.05, 0.05), (0.05, -0.05)]
+    # Draw magnified frame (circle)
+    mag_frame = Circle((0, 0), 0.11, facecolor='lightyellow', edgecolor='gray', linewidth=3, alpha=0.8)
+    inset_ax.add_patch(mag_frame)
+    # Draw enlarged neural network
+    input_nodes_inset = [(-0.06, 0.06), (-0.06, -0.06)]
+    hidden_nodes_inset = [(0.04, 0.06), (0.04, -0.06)]
     output_node_inset = (0.09, 0.0)
     for inp in input_nodes_inset:
         for hid in hidden_nodes_inset:
-            inset_ax.plot([inp[0], hid[0]], [inp[1], hid[1]], 'g-', linewidth=3, alpha=0.8)
+            inset_ax.plot([inp[0], hid[0]], [inp[1], hid[1]], 'g-', linewidth=5, alpha=0.9)
     for hid in hidden_nodes_inset:
-        inset_ax.plot([hid[0], output_node_inset[0]], [hid[1], output_node_inset[1]], 'r-', linewidth=3, alpha=0.8)
+        inset_ax.plot([hid[0], output_node_inset[0]], [hid[1], output_node_inset[1]], 'r-', linewidth=5, alpha=0.9)
     for node in input_nodes_inset:
-        circle = Circle(node, 0.022, facecolor='lightgreen', edgecolor='darkgreen', linewidth=3)
+        circle = Circle(node, 0.025, facecolor='lightgreen', edgecolor='darkgreen', linewidth=4)
         inset_ax.add_patch(circle)
+        inset_ax.text(node[0], node[1]+0.035, 'Input', fontsize=12, ha='center', color='darkgreen', fontweight='bold')
+        inset_ax.text(node[0], node[1]-0.035, 'Neuron', fontsize=10, ha='center', color='darkgreen')
     for node in hidden_nodes_inset:
-        circle = Circle(node, 0.022, facecolor='yellow', edgecolor='orange', linewidth=3)
+        circle = Circle(node, 0.025, facecolor='yellow', edgecolor='orange', linewidth=4)
         inset_ax.add_patch(circle)
-    output_circle = Circle(output_node_inset, 0.022, facecolor='lightcoral', edgecolor='darkred', linewidth=3)
+        inset_ax.text(node[0], node[1]+0.035, 'Problem Solving', fontsize=12, ha='center', color='orange', fontweight='bold')
+        inset_ax.text(node[0], node[1]-0.035, 'Neuron', fontsize=10, ha='center', color='orange')
+    output_circle = Circle(output_node_inset, 0.025, facecolor='lightcoral', edgecolor='darkred', linewidth=4)
     inset_ax.add_patch(output_circle)
-    # Enhanced labels
-    inset_ax.text(-0.05, 0.08, 'Input', fontsize=10, ha='center', color='darkgreen', fontweight='bold')
-    inset_ax.text(-0.05, -0.08, 'Input', fontsize=10, ha='center', color='darkgreen', fontweight='bold')
-    inset_ax.text(0.05, 0.08, 'Hidden', fontsize=10, ha='center', color='orange', fontweight='bold')
-    inset_ax.text(0.05, -0.08, 'Hidden', fontsize=10, ha='center', color='orange', fontweight='bold')
-    inset_ax.text(0.09, 0.0, 'Sum', fontsize=10, ha='left', color='darkred', fontweight='bold')
-    inset_ax.text(0, 0.11, 'Magnified AI Brain', fontsize=11, ha='center', color='orange', fontweight='bold')
-    # --- Arrow from selection circle to inset ---
-    # Draw arrow from selection circle to inset
-    arrow_start = (nn_center_x + nn_radius * 0.7, nn_center_y + nn_radius * 0.7)
-    arrow_end = (0.72 + 0.09, 0.12 + 0.18)
-    fig.canvas.draw()  # Ensure layout
-    ax.annotate('', xy=arrow_end, xytext=arrow_start,
-               arrowprops=dict(arrowstyle='->', lw=2, color='orange', connectionstyle="arc3,rad=0.2"))
+    inset_ax.text(output_node_inset[0], output_node_inset[1]+0.04, 'Sum', fontsize=12, ha='center', color='darkred', fontweight='bold')
+    inset_ax.text(output_node_inset[0], output_node_inset[1]-0.04, 'Neuron', fontsize=10, ha='center', color='darkred')
+    # Optional: Magnification label
+    inset_ax.text(0, 0.12, 'AI Brain (Magnified)', fontsize=13, ha='center', color='gray', fontweight='bold')
     
     # Title and labels
     ax.set_title('Hybrid Bio-AI Cell Structure', fontsize=18, fontweight='bold', pad=20)
