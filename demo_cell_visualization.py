@@ -122,13 +122,19 @@ def draw_hybrid_cell_diagram():
     ax.text(nn_center_x, nn_center_y + nn_radius + 0.02, 'AI Brain (Neural Network)', fontsize=10, ha='center', fontweight='bold', color='gray')
 
     # --- Connection Line to Magnified View ---
-    # Draw a curved line from the magnification circle to the magnified frame
-    # Start from the top-right of the magnification circle
-    arrow_start = (nn_center_x + nn_radius * 0.7, nn_center_y + nn_radius * 0.7)
-    # End at the left edge of the magnified frame
-    arrow_end = (0.78, 0.38)
+    # Remove old arrow and draw a new, thick, bold arrow
+    # Start: rightmost edge of magnification circle
+    arrow_start_x = nn_center_x + nn_radius * np.cos(np.pi/6)
+    arrow_start_y = nn_center_y + nn_radius * np.sin(np.pi/6)
+    arrow_start = (arrow_start_x, arrow_start_y)
+    # End: leftmost edge of magnified frame (circle)
+    # The inset axes are at [0.72, 0.32, 0.22, 0.32] in figure coordinates
+    # Convert to data coordinates for main axes
+    # We'll use a fixed point that matches the left edge of the magnified frame visually
+    arrow_end = (0.72 + 0.11, 0.32 + 0.48)  # visually matches the left edge of the inset circle
+    # Draw a thick, bold, red arrow
     ax.annotate('', xy=arrow_end, xytext=arrow_start,
-               arrowprops=dict(arrowstyle='->', lw=2, color='gray', connectionstyle="arc3,rad=0.3"))
+               arrowprops=dict(arrowstyle='->', lw=6, color='red', connectionstyle="arc3,rad=0.2"))
 
     # --- Magnified Frame ---
     # Large circular frame outside the cell (right side)
